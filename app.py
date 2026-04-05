@@ -7,8 +7,96 @@ from openai import AzureOpenAI
 # Page Config
 # --------------------------------------------------
 st.set_page_config(page_title="Recruitment Chatbot", page_icon="💼", layout="wide")
-st.title("💼 Recruitment Chatbot")
-st.caption("Upload your recruitment files and ask questions about your hiring data.")
+
+# --------------------------------------------------
+# Custom CSS
+# --------------------------------------------------
+st.markdown("""
+<style>
+    /* Main header */
+    .main-header {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        padding: 2rem 2.5rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .main-header h1 {
+        color: #ffffff;
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.5px;
+    }
+    .main-header p {
+        color: #a8b2c1;
+        font-size: 1rem;
+        margin: 0.4rem 0 0 0;
+    }
+
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background: #f8f9fc;
+        border-right: 1px solid #e2e8f0;
+    }
+    [data-testid="stSidebar"] .stButton > button {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid #e53e3e;
+        color: #e53e3e;
+        background: transparent;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    [data-testid="stSidebar"] .stButton > button:hover {
+        background: #e53e3e;
+        color: white;
+    }
+
+    /* File uploader */
+    [data-testid="stFileUploader"] {
+        border-radius: 10px;
+    }
+
+    /* Chat messages */
+    [data-testid="stChatMessage"] {
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        padding: 0.25rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #718096;
+    }
+    .empty-state .icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+    }
+    .empty-state h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Stat badges in sidebar */
+    .stat-badge {
+        background: #ebf8ff;
+        border: 1px solid #bee3f8;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+        color: #2b6cb0;
+        margin-top: 0.5rem;
+    }
+
+    /* Divider */
+    hr { border-color: #e2e8f0; }
+</style>
+""", unsafe_allow_html=True)
 
 # --------------------------------------------------
 # API Credentials
@@ -71,10 +159,24 @@ def extract_file_content(file) -> str:
 
 
 # --------------------------------------------------
+# Header
+# --------------------------------------------------
+st.markdown("""
+<div class="main-header">
+    <h1>💼 Recruitment Chatbot</h1>
+    <p>Upload your recruitment files and ask questions about your hiring data.</p>
+</div>
+""", unsafe_allow_html=True)
+
+# --------------------------------------------------
 # Sidebar: File Upload
 # --------------------------------------------------
-st.sidebar.header("📂 Upload Recruitment Data")
-st.sidebar.markdown(f"Supported formats: `{', '.join(SUPPORTED_TYPES)}`")
+st.sidebar.markdown("## 📂 Upload Recruitment Data")
+st.sidebar.markdown(
+    f"<small style='color:#718096'>Supported: {', '.join(f'<code>{t}</code>' for t in SUPPORTED_TYPES)}</small>",
+    unsafe_allow_html=True,
+)
+st.sidebar.markdown("---")
 
 uploaded_files = st.sidebar.file_uploader(
     "Upload one or more files",
@@ -101,13 +203,15 @@ if files_ready:
                 st.session_state.files_context = "\n\n---\n\n".join(context_parts)
                 st.session_state.file_key = file_key
                 st.session_state.messages = []
-                st.sidebar.success(f"✅ Loaded {len(uploaded_files)} file(s).")
             except Exception as e:
                 st.sidebar.error(f"Error processing files: {e}")
                 st.stop()
-    else:
-        st.sidebar.success(f"✅ {len(uploaded_files)} file(s) ready.")
 
+    st.sidebar.markdown(
+        f"<div class='stat-badge'>✅ {len(uploaded_files)} file(s) loaded</div>",
+        unsafe_allow_html=True,
+    )
+    st.sidebar.markdown("---")
     if st.sidebar.button("🗑️ Clear Chat"):
         st.session_state.messages = []
         st.rerun()
@@ -120,6 +224,17 @@ else:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Empty state
+if not st.session_state.messages:
+    st.markdown("""
+    <div class="empty-state">
+        <div class="icon">🤖</div>
+        <h3>Ready to help with your recruitment data</h3>
+        <p>Upload your files in the sidebar, then ask anything about your hiring pipeline.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Render chat history
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
