@@ -1,0 +1,89 @@
+# Recruitment Chatbot
+
+## Overview
+
+This project is a recruitment chatbot that scans open positions, manages candidates, and tracks recruiter performance. It assists hiring teams by automating candidate intake, matching candidates to roles, scheduling interviews, and reporting recruiting metrics.
+
+## Features
+
+- Scan and index open positions from a jobs source
+- Candidate intake and profile management
+- Candidate-role matching and ranking
+- Interview scheduling and notifications
+- Recruiter performance tracking and reporting
+- Exportable reports and metrics
+- Configurable rules for screening and workflow
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repo-url>
+cd recruitment_Chatbot
+```
+
+2.(Optional) Create and activate a virtual environment:
+
+```bash
+python -m venv .venv
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+# or Command Prompt
+.\.venv\Scripts\activate.bat
+```
+
+3.Install dependencies from `requirements.txt`:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+Run the main script to start the chatbot or related CLI tasks:
+
+```bash
+python main.py
+```
+
+Add any runtime options or environment variables as needed for your deployment.
+
+## Data
+
+Candidate data is typically stored under a `data/` folder (create it if not present). Below is a sample table of candidate information.
+
+| Name | Position | Status |
+| ------ | ---------- | -------- |
+| Aisha Gupta | Software Engineer | Screening |
+| Rohan Sharma | Data Scientist | Interview Scheduled |
+| Neha Kapoor | Frontend Developer | Offer Extended |
+
+(If you have a different data storage method—database, CSV, or external ATS—update the `data/` reference accordingly.)
+
+## Results
+
+Sample metrics (examples of what the chatbot reports):
+
+| Metric | Example Value |
+| -------- | --------------- |
+| Total candidates processed | 124 |
+| Offers made | 9 |
+| Average recruitment time | 21 days |
+| Interviews scheduled | 47 |
+| Candidates moved to next stage (%) | 38% |
+
+## Contributing
+
+- Fork the repository and create a feature branch for your changes.
+- Open a clear, well-described pull request referencing any related issues.
+- Follow existing code style and add tests for new functionality where appropriate.
+- Run `pip install -r requirements.txt` and validate locally before submitting a PR.
+
+## License
+
+This project is available under the MIT License. Replace this section with your project's actual license if different.
+
+---
+
+For more details, see the project files and `main.py`.
