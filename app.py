@@ -6,9 +6,9 @@ from openai import AzureOpenAI
 # --------------------------------------------------
 # Page Config
 # --------------------------------------------------
-st.set_page_config(page_title="File Q&A Chatbot", page_icon="📁", layout="wide")
-st.title("📁 File Q&A Chatbot")
-st.caption("Upload any files and ask questions about their content.")
+st.set_page_config(page_title="Recruitment Chatbot", page_icon="💼", layout="wide")
+st.title("💼 Recruitment Chatbot")
+st.caption("Upload your recruitment files and ask questions about your hiring data.")
 
 # --------------------------------------------------
 # API Credentials
@@ -73,7 +73,7 @@ def extract_file_content(file) -> str:
 # --------------------------------------------------
 # Sidebar: File Upload
 # --------------------------------------------------
-st.sidebar.header("📂 Upload Files")
+st.sidebar.header("📂 Upload Recruitment Data")
 st.sidebar.markdown(f"Supported formats: `{', '.join(SUPPORTED_TYPES)}`")
 
 uploaded_files = st.sidebar.file_uploader(
@@ -124,9 +124,9 @@ for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("Ask a question about your files..."):
+if prompt := st.chat_input("Ask a recruitment question..."):
     if not files_ready or "files_context" not in st.session_state:
-        st.warning("Please upload at least one file using the sidebar first.")
+        st.warning("Please upload at least one recruitment file using the sidebar first.")
     else:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
